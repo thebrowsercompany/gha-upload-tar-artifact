@@ -1,0 +1,73 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  upload-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create executable file
+        run: |
+            echo "#!/bin/bash" > hello.sh
+            echo "echo 'Hello world!'" >> hello.sh
+            chmod +x hello.sh
+
+      - name: Upload artifact
+        uses: ./
+        with:
+          name: hello-file
+          path: hello.sh
+
+      - name: Delete file
+        run: rm hello.sh
+
+      - name: Download artifact
+        uses: thebrowsercompany/gha-download-tar-artifact@main
+        with:
+          name: hello-file
+          path: .
+
+      - name: Run executable
+        run: |
+            ./hello.sh
+
+  upload-directory:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create directory
+        run: |
+            mkdir -p hello
+            echo "Hello world!" > hello/world.txt
+            echo "#!/bin/bash" > hello/hello.sh
+            echo "echo 'Hello world!'" >> hello/hello.sh
+            chmod +x hello/hello.sh
+
+      - name: Upload artifact
+        uses: ./
+        with:
+          name: hello-dir
+          path: hello/
+
+      - name: Delete directory
+        run: rm -rf hello
+
+      - name: Download artifact
+        uses: thebrowsercompany/gha-download-tar-artifact@main
+        with:
+          name: hello-dir
+          path: hello/
+
+      - name: Check permissions
+        run: |
+            ./hello/hello.sh && ! test -x hello/world.txt
