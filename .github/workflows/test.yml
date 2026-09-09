@@ -30,7 +30,7 @@ jobs:
         run: rm hello.sh
 
       - name: Download artifact
-        uses: thebrowsercompany/gha-download-tar-artifact@main
+        uses: thebrowsercompany/gha-download-tar-artifact@2cdc70ecdee66f79c963aa2a8b8aa81c4469aa81
         with:
           name: hello-file
           path: .
@@ -63,7 +63,7 @@ jobs:
         run: rm -rf hello
 
       - name: Download artifact
-        uses: thebrowsercompany/gha-download-tar-artifact@main
+        uses: thebrowsercompany/gha-download-tar-artifact@2cdc70ecdee66f79c963aa2a8b8aa81c4469aa81
         with:
           name: hello-dir
           path: hello/
